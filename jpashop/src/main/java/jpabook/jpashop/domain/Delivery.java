@@ -7,6 +7,8 @@ import org.apache.tomcat.jni.Address;
 
 import javax.persistence.*;
 
+import static javax.persistence.FetchType.LAZY;
+
 @Entity
 @Getter @Setter
 public class Delivery {
@@ -15,7 +17,7 @@ public class Delivery {
     @Column(name = "delivery_id")
     private Long id;
 
-    @OneToOne(mappedBy = "delivery")
+    @OneToOne(mappedBy = "delivery",fetch = LAZY)
     private Order order;
 
     @Embedded
