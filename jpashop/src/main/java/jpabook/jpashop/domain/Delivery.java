@@ -2,8 +2,6 @@ package jpabook.jpashop.domain;
 
 import lombok.Getter;
 import lombok.Setter;
-import org.apache.catalina.filters.AddDefaultCharsetFilter;
-import org.apache.tomcat.jni.Address;
 
 import javax.persistence.*;
 
@@ -26,5 +24,5 @@ public class Delivery {
     @Enumerated(EnumType.STRING)        //꼭 스트링으로 해야 안밀린다.
     private DelivaryStatus status;  //READY, COMP
 
- 
+
 }
