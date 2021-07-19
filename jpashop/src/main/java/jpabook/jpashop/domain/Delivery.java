@@ -25,4 +25,6 @@ public class Delivery {
 
     @Enumerated(EnumType.STRING)        //꼭 스트링으로 해야 안밀린다.
     private DelivaryStatus status;  //READY, COMP
+
+ 
 }
