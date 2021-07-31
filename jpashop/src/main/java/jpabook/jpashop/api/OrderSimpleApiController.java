@@ -5,6 +5,8 @@ import jpabook.jpashop.domain.Order;
 import jpabook.jpashop.domain.OrderStatus;
 import jpabook.jpashop.repository.OrderRepository;
 import jpabook.jpashop.repository.OrderSearch;
+import jpabook.jpashop.repository.order.simplequery.OrderSimpleQueryDto;
+import jpabook.jpashop.repository.order.simplequery.OrderSimpleQueryRepository;
 import lombok.Data;
 import lombok.RequiredArgsConstructor;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -27,7 +29,9 @@ import java.util.stream.Collectors;
 @RestController
 @RequiredArgsConstructor
 public class OrderSimpleApiController {
+
     private final OrderRepository orderRepository;
+    private final OrderSimpleQueryRepository orderSimpleQueryRepository;
 
     @GetMapping("/api/v1/simple-orders")
     public List<Order> ordersV1(){
@@ -54,7 +58,11 @@ public class OrderSimpleApiController {
         return result;
     }
 
-    @GetMapping("/api/v3/simple-orders")
+    //v3 와 v4의 우열을 가리긴 힘들다.
+    //v3 는 재사용성과 코드짜기 좋은점이 v4보다 좋고
+    //v4 는 성능에 있어서 v3보다 좋다.
+
+    @GetMapping("/api/v3/simple-orders")            // v3 는 재사용성이 좋다 로직 재사용가능
     public List<SimpleOrderDto> ordersV3(){
         List<Order> orders=orderRepository.findAllWithMemberDelivery();
         List<SimpleOrderDto> result = orders.stream().map(o -> new SimpleOrderDto(o)).collect(Collectors.toList());
@@ -62,8 +70,14 @@ public class OrderSimpleApiController {
         return result;
     }
 
+    @GetMapping("/api/v4/simple-orders")            // v4는 v3보다 성능 최적화에는 좋다.
+    public List<OrderSimpleQueryDto> ordersV4(){    // 리포지토리 재사용성이 떨어진다. api 스펙이 바뀌면 뜯어 고쳐야한다.
+        return orderSimpleQueryRepository.findOrderDtos();
+
+    }
+
     @Data
-    static class SimpleOrderDto {
+    public static class SimpleOrderDto {
         private Long orderId;
         private String name;
         private LocalDateTime orderDate;
